@@ -1,7 +1,9 @@
-package cli
+package main
 
-import ()
+import (
+  "github.com/fostemi/fdo/internal/cli"
+)
 
 func main() {
-  // run cli
+  cli.Execute()
 }
