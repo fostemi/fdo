@@ -1,9 +1,7 @@
 package main
 
 import (
-  "fmt"
-  "net/http"
-  "log/slog"
+  "github.com/fostemi/fdo/internal/api"
   "flag"
 )
 
@@ -13,13 +11,7 @@ var (
 
 func main () {
   flag.Parse()
-  http.Handle("/healthz", http.HandlerFunc(health))
-  err := http.ListenAndServe(*addr, nil)
-  if err != nil {
-    slog.Error("ListenAndServe:", slog.Any("error", err))
-  }
-}
 
-func health(w http.ResponseWriter, req *http.Request) {
-  fmt.Fprintf(w, "Healthy")
+  e := api.Engine()
+  e.Run(*addr)
 }
