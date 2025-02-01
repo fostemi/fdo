@@ -2,9 +2,8 @@ package bucket
 
 import (
 	"context"
+  "fmt"
 	"net/http"
-
-	// "github.com/fostemi/fdo/internal/common/utils"
 
 	"github.com/fostemi/fdo/internal/common/utils"
 	"github.com/gin-gonic/gin"
@@ -14,24 +13,22 @@ import (
 	"google.golang.org/api/option"
 )
 
-func Create(c *gin.Context) error {
+func Create(c *gin.Context) {
   ctx := context.Background()
   creds := getCredsFromToken(ctx, getToken(c.Request))
   _, err := storage.NewClient(ctx, option.WithAuthCredentials(creds))
   if err != nil {
-    return err
+    c.JSON(http.StatusBadRequest, gin.H{"error": err})
   }
-  return nil
+  fmt.Println(creds)
+  c.JSON(http.StatusOK, gin.H{"message": "Success getting token and auth to gcp"})
 }
 
 func getCredsFromToken(ctx context.Context, token string) *auth.Credentials{
-  t := auth.Token{
-    Value: token,
-    Type: "Bearer",
-  }
-  key := auth.Token{}
+  type tokenKey string
+  key := tokenKey("Key")
   var tp auth.TokenProvider
-  tp.Token(context.WithValue(ctx, key, t))
+  tp.Token(context.WithValue(ctx, key, token))
   opts := &auth.CredentialsOptions{
     TokenProvider: tp,
   }
