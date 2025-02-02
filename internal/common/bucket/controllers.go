@@ -15,7 +15,7 @@ import (
 
 func Create(c *gin.Context) {
   ctx := context.Background()
-  creds := getCredsFromToken(ctx, getToken(c.Request))
+  creds := getCredsFromToken(getToken(c.Request))
   _, err := storage.NewClient(ctx, option.WithAuthCredentials(creds))
   if err != nil {
     c.JSON(http.StatusBadRequest, gin.H{"error": err})
@@ -24,11 +24,11 @@ func Create(c *gin.Context) {
   c.JSON(http.StatusOK, gin.H{"message": "Success getting token and auth to gcp"})
 }
 
-func getCredsFromToken(ctx context.Context, token string) *auth.Credentials{
+func getCredsFromToken(token string) *auth.Credentials{
   type tokenKey string
   key := tokenKey("Key")
   var tp auth.TokenProvider
-  tp.Token(context.WithValue(ctx, key, token))
+  tp.Token(context.WithValue(context.Background(), key, token))
   opts := &auth.CredentialsOptions{
     TokenProvider: tp,
   }
