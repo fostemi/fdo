@@ -1,8 +1,10 @@
 package main
 
 import (
-  "github.com/fostemi/fdo/internal/api"
-  "flag"
+	"flag"
+	"log"
+
+	"github.com/fostemi/fdo/internal/api"
 )
 
 var (
@@ -12,6 +14,9 @@ var (
 func main () {
   flag.Parse()
 
-  e := api.Engine()
-  e.Run(*addr)
+  api.CreateRoutes()
+  err := api.ListenAndServe(*addr, nil)
+  if err != nil {
+    log.Fatal(err)
+  }
 }

@@ -6,22 +6,23 @@ import (
 	"net/http"
 
 	"github.com/fostemi/fdo/internal/common/utils"
-	"github.com/gin-gonic/gin"
 
 	"cloud.google.com/go/auth"
 	"cloud.google.com/go/storage"
 	"google.golang.org/api/option"
 )
 
-func Create(c *gin.Context) {
+func Create(w http.ResponseWriter, req *http.Request) {
+  // var res http.Response
   ctx := context.Background()
-  creds := getCredsFromToken(getToken(c.Request))
+  creds := getCredsFromToken(getToken(req))
   _, err := storage.NewClient(ctx, option.WithAuthCredentials(creds))
   if err != nil {
-    c.JSON(http.StatusBadRequest, gin.H{"error": err})
+    // res.Body = 
+    // res.JSON(http.StatusBadRequest, gin.H{"error": err})
   }
   fmt.Println(creds)
-  c.JSON(http.StatusOK, gin.H{"message": "Success getting token and auth to gcp"})
+  // c.JSON(http.StatusOK, gin.H{"message": "Success getting token and auth to gcp"})
 }
 
 func getCredsFromToken(token string) *auth.Credentials{
