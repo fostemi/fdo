@@ -2,7 +2,7 @@ package bucket
 
 import (
 	"context"
-  "fmt"
+	"fmt"
 	"net/http"
 
 	"github.com/fostemi/fdo/internal/common/utils"
@@ -13,16 +13,13 @@ import (
 )
 
 func Create(w http.ResponseWriter, req *http.Request) {
-  // var res http.Response
   ctx := context.Background()
   creds := getCredsFromToken(getToken(req))
   _, err := storage.NewClient(ctx, option.WithAuthCredentials(creds))
   if err != nil {
-    // res.Body = 
-    // res.JSON(http.StatusBadRequest, gin.H{"error": err})
+    http.Error(w, fmt.Sprint("Error creating storage client with creds, error: ", err), http.StatusBadRequest)
   }
-  fmt.Println(creds)
-  // c.JSON(http.StatusOK, gin.H{"message": "Success getting token and auth to gcp"})
+  fmt.Fprint(w, creds)
 }
 
 func getCredsFromToken(token string) *auth.Credentials{
