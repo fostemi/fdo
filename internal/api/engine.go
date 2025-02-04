@@ -1,21 +1,29 @@
 package api
 
 import (
+  "fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
   "github.com/fostemi/fdo/internal/common/bucket"
 )
 
-func Engine() *gin.Engine {
+type Engine interface {
+
+}
+
+type Server struct {
+
+}
+
+func  CreateRoutes() {
   r := gin.Default()
 
-  r.GET("/healthz", func(c *gin.Context){
-    c.JSON(http.StatusOK, gin.H{
-      "message": "Healthy",
-    })
-  })
+  http.Handle("/healthz", http.HandlerFunc(Health))
 
   r.POST("/create/bucket", bucket.Create)
-  return r
+}
+
+func Health(w http.ResponseWriter, req *http.Request) {
+  fmt.Fprint(w, "Healthy")
 }
