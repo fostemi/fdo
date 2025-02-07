@@ -1,14 +1,15 @@
 package main
 
 import (
-  "fmt"
-  "context"
+	"context"
+	"flag"
+	"fmt"
 )
 
 func main() {
+  flag.Parse()
   ctx := context.Background()
 
-  fmt.Println("Hello World!")
   projectID := "hydra-alert-dev-78gx"
   bucketName := "hydra-alert-dev-78gx-tst-00000"
 
